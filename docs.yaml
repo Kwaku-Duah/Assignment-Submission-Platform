@@ -1,0 +1,950 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Your API Title
+  description: Your API Description
+
+paths:
+  /api/auth/login:
+    post:
+      summary: Login user
+      description: Authenticate user and generate JWT token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                emailOrId:
+                  type: string
+                  description: The user's email address or staff ID.
+                password:
+                  type: string
+                  description: The user's password.
+              required:
+                - emailOrId
+                - password
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userInfo:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: The user's ID.
+                      firstName:
+                        type: string
+                        description: The user's first name.
+                      lastName:
+                        type: string
+                        description: The user's last name.
+                      role:
+                        type: string
+                        description: The user's role.
+                      email:
+                        type: string
+                        description: The user's email address.
+                  token:
+                    type: string
+                    description: JWT token for user authentication and security
+        '400':
+          description: Bad request, incorrect password
+        '404':
+          description: User not found
+
+
+
+  /api/students/register:
+    post:
+      summary: Add students to the system.
+      description: Add multiple students to the system, handling duplicate emails and sending invitations.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  firstName:
+                    type: string
+                  lastName:
+                    type: string
+                  email:
+                    type: string
+      responses:
+        '200':
+          description: Users and Students processed successfully.
+        '500':
+          description: Internal Server Error
+
+  /api/students/all:
+    get:
+      summary: Retrieve all students.
+      description: Retrieve all students from the system.
+      parameters:
+        - in: query
+          name: skip
+          schema:
+            type: integer
+          description: Number of records to skip.
+      responses:
+        '200':
+          description: Successfully retrieved students.
+        '500':
+          description: Internal Server Error
+
+  /api/students/total:
+    get:
+      summary: Get total number of students.
+      description: Get the total number of students in the system.
+      responses:
+        '200':
+          description: Successfully retrieved total number of students.
+        '500':
+          description: Internal Server Error
+
+  /api/lecturers/register:
+    post:
+      summary: Add a new lecturer
+      description: Add one or more new lecturers to the system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  firstName:
+                    type: string
+                    description: The first name of the lecturer.
+                  lastName:
+                    type: string
+                    description: The last name of the lecturer.
+                  email:
+                    type: string
+                    description: The email address of the lecturer.
+                required:
+                  - firstName
+                  - lastName
+                  - email
+      responses:
+        '200':
+          description: Lecturers processed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A message indicating the outcome of the lecturer addition.
+                  successfulEntries:
+                    type: array
+                    description: Array of successful entries.
+                  skippedEntries:
+                    type: array
+                    description: Array of skipped entries.
+        '500':
+          description: Internal server error
+
+/api/lecturers/all:
+  get:
+    summary: Get all lecturers
+    description: Retrieve a list of all lecturers in the system.
+    responses:
+      '200':
+        description: A list of lecturers
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                lecturerId:
+                  type: string
+                  description: The Lecturers StaffId.
+                firstName:
+                  type: string
+                  description: The first name of the lecturer.
+                lastName:
+                  type: string
+                  description: The last name of the lecturer.
+              required:
+                - lecturerId
+                - firstName
+                - lastName
+      '500':
+        description: Internal server error
+
+
+/api/lecturers/total:
+  get:
+    summary: Get total number of lecturers.
+    description: Get the total number of lecturers in the system.
+    responses:
+      '200':
+        description: Successfully retrieved total number of lecturers.
+      '500':
+        description: Internal Server Error
+
+/api/password/reset:
+  post:
+    summary: Change user password.
+    description: Change the password for a user in the system.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              userId:
+                type: string
+              newPassword:
+                type: string
+              confirmPassword:
+                type: string
+    responses:
+      '200':
+        description: Password changed successfully.
+      '400':
+        description: Bad request or validation error
+
+
+/api/assigments/new:
+  post:
+    summary: Create a new assignment.
+    description: Creates a new assignment in the system.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+              course:
+                type: string
+              description:
+                type: string
+              deadline:
+                type: string
+              isPublished:
+                type: boolean
+    responses:
+      '200':
+        description: Created successfully.
+      '400':
+        description: Bad request.
+      '500':
+        description: Internal server error.
+
+/api/assignments/all:
+  get:
+    summary: Retrieve all assignments.
+    description: Retrieves all assignments from the system.
+    responses:
+      '200':
+        description: A list of assignments.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                assignments:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      title:
+                        type: string
+                      course:
+                        type: string
+                      description:
+                        type: string
+                      deadline:
+                        type: string
+                      isPublished:
+                        type: boolean
+      '500':
+        description: Internal server error.
+
+/api/invitation/assignment:
+  post:
+    summary: Send invitations for an assignment to multiple students.
+    description: Send invitations to students for a specific assignment.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              studentIds:
+                type: array
+                items:
+                  type: string
+                description: An array of student staffIds.
+              assignmentCode:
+                type: string
+                description: The code of the assignment for which invitations are sent.
+    responses:
+      '200':
+        description: Invitations processed successfully.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: A message indicating the success of the operation.
+                successfulEntries:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      studentId:
+                        type: string
+                        description: The staffId of the student for whom the invitation was successful.
+                      message:
+                        type: string
+                        description: A message indicating the success of the invitation.
+                  description: An array containing details of successfully processed invitations.
+                skippedEntries:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      studentId:
+                        type: string
+                        description: The staffId of the student for whom the invitation was skipped.
+                      message:
+                        type: string
+                        description: A message indicating the reason for skipping the invitation.
+                  description: An array containing details of skipped invitations.
+      '500':
+        description: Internal server error
+
+
+/api/lecturers/clear:
+  delete:
+    summary: Delete Lecturers
+    description: Delete one or more lecturers along with their associated assignments.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              staffIds:
+                type: array
+                items:
+                  type: string
+                description: Array of staffIds for lecturers to be deleted.
+    responses:
+      '200':
+        description: Lecturers deleted successfully.
+        content:
+          application/json:
+            example:
+              message: 'Lecturers deleted successfully'
+      '404':
+        description: Lecturers not found.
+        content:
+          application/json:
+            example:
+              error: 'Lecturers not found'
+      '500':
+        description: Internal Server Error.
+        content:
+          application/json:
+            example:
+              error: 'Internal Server Error'
+
+/api/lecturers/update:
+  put:
+    summary: Edit Lecturer
+    description: Update details of a lecturer.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              staffId:
+                type: string
+                description: The unique identifier of the lecturer.
+              updatedUser:
+                type: object
+                properties:
+                  email:
+                    type: string
+                    description: The updated email address of the lecturer.
+                  firstName:
+                    type: string
+                    description: The updated first name of the lecturer.
+                  lastName:
+                    type: string
+                    description: The updated last name of the lecturer.
+                required:
+                  - email
+                  - firstName
+                  - lastName
+    responses:
+      '200':
+        description: Lecturer details updated successfully.
+        content:
+          application/json:
+            example:
+              message: 'Lecturer details updated successfully'
+      '500':
+        description: Internal Server Error.
+        content:
+          application/json:
+            example:
+              error: 'Internal Server Error'
+
+
+/api/students/clear:
+  delete:
+    summary: Delete Students
+    description: Delete one or more students along with their associated assignments.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              studentIds:
+                type: array
+                items:
+                  type: string
+                description: Array of studentIds for students to be deleted.
+    responses:
+      '200':
+        description: Students deleted successfully.
+        content:
+          application/json:
+            example:
+              message: 'Students deleted successfully'
+      '404':
+        description: Students not found.
+        content:
+          application/json:
+            example:
+              error: 'Students not found'
+      '500':
+        description: Internal Server Error.
+        content:
+          application/json:
+            example:
+              error: 'Internal Server Error'
+
+/api/students/update:
+  put:
+    summary: Edit Student
+    description: Edit details of a student.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              studentId:
+                type: string
+                description: The unique identifier of the student to be edited.
+              updatedUser:
+                type: object
+                properties:
+                  email:
+                    type: string
+                    description: The updated email of the student.
+                  firstName:
+                    type: string
+                    description: The updated first name of the student.
+                  lastName:
+                    type: string
+                    description: The updated last name of the student.
+                required:
+                  - email
+                  - firstName
+                  - lastName
+    responses:
+      '200':
+        description: Student details updated successfully.
+        content:
+          application/json:
+            example:
+              message: 'Student details updated successfully'
+      '404':
+        description: Student not found.
+        content:
+          application/json:
+            example:
+              error: 'Student not found'
+      '500':
+        description: Internal Server Error.
+        content:
+          application/json:
+            example:
+              error: 'Internal Server Error'
+
+
+/api/assignments/total:
+  get:
+    summary: Get Total Assignments
+    description: Retrieve the total number of assignments.
+    responses:
+      '200':
+        description: Successful retrieval of total assignments count.
+        content:
+          application/json:
+            example:
+              totalAssignments: 10
+      '500':
+        description: Internal Server Error.
+        content:
+          application/json:
+            example:
+              error: 'Internal Server Error'
+
+
+/api/assignments/update:
+  put:
+    summary: Update Assignment
+    description: Update an existing assignment.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              assignmentCode:
+                type: string
+                description: Unique code identifying the assignment.
+              title:
+                type: string
+                description: Updated title of the assignment.
+              course:
+                type: string
+                description: Updated course information for the assignment.
+              description:
+                type: string
+                description: Updated description of the assignment.
+              deadline:
+                type: string
+                format: date-time
+                description: Updated deadline for the assignment.
+              isPublished:
+                type: boolean
+                description: Updated status indicating whether the assignment is published.
+    responses:
+      '200':
+        description: Assignment updated successfully.
+        content:
+          application/json:
+            example:
+              assignment:
+                id: 1
+                title: 'Updated Assignment'
+                course: 'Updated Course'
+                description: 'Updated Assignment Description'
+                deadline: '2024-03-01T12:00:00Z'
+                isPublished: true
+                assignmentCode: 'ASS-001'
+      '404':
+        description: Assignment not found or not authorized.
+        content:
+          application/json:
+            example:
+              error: 'Assignment not found or not authorized.'
+      '500':
+        description: Internal Server Error.
+        content:
+          application/json:
+            example:
+              error: 'Internal Server Error'
+
+/api/assignments/clear:
+  delete:
+    summary: Delete Assignment
+    description: Delete an existing assignment.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              assignmentCode:
+                type: string
+                description: Unique code identifying the assignment to be deleted.
+    responses:
+      '200':
+        description: Assignment deleted successfully.
+        content:
+          application/json:
+            example:
+              message: 'Assignment deleted successfully.'
+      '404':
+        description: Assignment not found or not authorized.
+        content:
+          application/json:
+            example:
+              error: 'Assignment not found or not authorized.'
+      '500':
+        description: Internal Server Error.
+        content:
+          application/json:
+            example:
+              error: 'Internal Server Error'
+
+/api/students/byassignment:
+  get:
+    summary: Get Students by Assignment
+    description: Retrieve students associated with a specific assignment.
+    parameters:
+      - name: assignmentCode
+        in: query
+        description: Unique code identifying the assignment.
+        required: true
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Successful response with students for the assignment
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                students:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      firstName:
+                        type: string
+                      lastName:
+                        type: string
+                      email:
+                        type: string
+                      staffId:
+                        type: string
+      '404':
+        description: Assignment not found or not authorized.
+        content:
+          application/json:
+            example:
+              error: 'Assignment not found or not authorized.'
+      '500':
+        description: Internal Server Error.
+        content:
+          application/json:
+            example:
+              error: 'Internal Server Error'
+
+/api/submit/assignment:
+  post:
+    summary: Submit assignment files
+    description: Endpoint for submitting assignment files.
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              files:
+                type: array
+                items:
+                  type: string
+                  format: binary
+            required:
+              - files
+    parameters:
+      - in: query
+        name: studentId
+        required: true
+        schema:
+          type: string
+        description: The ID of the student submitting the assignment.
+      - in: query
+        name: assignmentCode
+        required: true
+        schema:
+          type: string
+        description: The code of the assignment being submitted.
+    responses:
+      '200':
+        description: Successful submission
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: A success message.
+                fileUrls:
+                  type: array
+                  items:
+                    type: string
+                  description: URLs of the uploaded files.
+                submissions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      // Define properties for each submission if needed
+                    description: Information about each submission.
+      '400':
+        description: Bad request
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  description: Error message indicating the issue.
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  description: Error message indicating the internal server error.
+
+/api/submissions/{studentId}/{assignmentCode}:
+  get:
+    summary: Get submissions by student and assignment
+    description: Retrieve submissions based on the provided student ID and assignment code.
+    parameters:
+      - in: path
+        name: studentId
+        required: true
+        schema:
+          type: string
+        description: The ID of the student.
+      - in: path
+        name: assignmentCode
+        required: true
+        schema:
+          type: string
+        description: The code of the assignment.
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                submissions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      // Define properties for each submission if needed
+                  description: Information about each submission.
+      '400':
+        description: Bad request
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  description: Error message indicating the issue.
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  description: Error message indicating the internal server error.
+
+
+/api/lecturers/assignments:
+  get:
+    summary: Retrieve assignments for the authenticated lecturer
+    description: |
+      Retrieves assignments associated with the authenticated lecturer, along with total submissions and student names.
+    responses:
+      '200':
+        description: Successful operation. Returns assignments for the authenticated lecturer.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                assignments:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: The unique identifier for the assignment.
+                      title:
+                        type: string
+                        description: The title of the assignment.
+                      course:
+                        type: string
+                        description: The course related to the assignment.
+                      description:
+                        type: string
+                        description: The description of the assignment.
+                      deadline:
+                        type: string
+                        format: date-time
+                        description: The deadline for the assignment.
+                      lecturerId:
+                        type: string
+                        description: The ID of the lecturer associated with the assignment.
+                      isPublished:
+                        type: boolean
+                        description: Indicates if the assignment is published.
+                      assignmentCode:
+                        type: string
+                        description: The unique code assigned to the assignment.
+                      totalSubmissions:
+                        type: integer
+                        description: The total number of unique submissions for the assignment.
+                      studentIds:
+                        type: array
+                        items:
+                          type: string
+                        description: An array of unique student IDs who submitted the assignment.
+                      studentNames:
+                        type: array
+                        items:
+                          type: string
+                        description: An array of unique student names who submitted the assignment.
+    security:
+      - bearerAuth: []
+  components:
+    securitySchemes:
+      bearerAuth:
+        type: http
+        scheme: bearer
+        bearerFormat: JWT
+
+/api/submissions/assignments:
+  get:
+    summary: Count submissions for assignments by lecturer
+    description: Retrieves the count of submissions for each assignment by the authenticated lecturer.
+    responses:
+      '200':
+        description: Successful operation. Returns submission counts for assignments.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                submissionCounts:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      assignmentCode:
+                        type: string
+                        description: The code of the assignment.
+                      _count:
+                        type: object
+                        description: Object containing submission count details.
+                        properties:
+                          _all:
+                            type: integer
+                            description: Total number of submissions for the assignment.
+    security:
+      - bearerAuth: []
+
+/api/submissions/total:
+  get:
+    summary: Count total submitted assignments
+    description: Retrieves the count of distinct assignments that have been submitted.
+    responses:
+      '200':
+        description: Successful operation. Returns the total count of submitted assignments.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                assignmentCount:
+                  type: integer
+                  description: The total count of distinct assignments that have been submitted.
+    security:
+      - bearerAuth: []
+
+/api/password/forgot:
+  post:
+    summary: Send a password reset link to the user's email
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                description: The email address of the user requesting a password reset.
+    responses:
+      '200':
+        description: Password reset link sent successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: A message confirming that the password reset link has been sent.
+                link:
+                  type: string
+                  description: The password reset link sent to the user's email.
+      '400':
+        description: Bad request
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: A message indicating the reason for the bad request.
+    security: []
+
+
+
+
+

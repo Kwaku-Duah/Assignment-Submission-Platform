@@ -1,0 +1,81 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+enum ROLE {
+  ADMIN
+  STUDENT
+  LECTURER
+}
+
+model User {
+  id             Int     @id @default(autoincrement())
+  firstName      String
+  lastName       String
+  email          String  @unique
+  password       String
+  staffId        String  @unique
+  role           ROLE
+  changePassword Boolean @default(true)
+}
+
+model Admin {
+  id      Int    @id @default(autoincrement())
+  email   String @unique
+  staffId String @unique
+}
+
+model Student {
+  id          Int           @id @default(autoincrement())
+  email       String        @unique
+  studentId   String        @unique
+  Invitations Invitation[]
+  Submissions Submissions[]
+}
+
+model Lecturer {
+  id          Int          @id @default(autoincrement())
+  email       String       @unique
+  lecturerId  String       @unique
+  assignments Assignment[]
+}
+
+model Assignment {
+  id             Int           @id @default(autoincrement())
+  title          String
+  course         String?
+  description    String
+  deadline       DateTime
+  lecturerId     String
+  lecturer       Lecturer      @relation(fields: [lecturerId], references: [lecturerId])
+  isPublished    Boolean       @default(false)
+  assignmentCode String?       @unique
+  invitations    Invitation[]
+  submission     Submissions[]
+}
+
+model Invitation {
+  id           Int         @id @default(autoincrement())
+  students     Student[]
+  Assignment   Assignment? @relation(fields: [assignmentId], references: [assignmentCode])
+  assignmentId String?
+}
+
+model Submissions {
+  id             Int         @id @default(autoincrement())
+  url            String
+  emailSent      Boolean     @default(false)
+  Student        Student?    @relation(fields: [studentId], references: [studentId])
+  studentId      String?
+  Assignment     Assignment? @relation(fields: [assignmentCode], references: [assignmentCode])
+  assignmentCode String
+}

@@ -1,0 +1,13 @@
+version: '3.0'
+services:
+  asp-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: asp-backend
+    image: asp-backend
+    restart: on-failure
+    ports:
+      - '3001:5000'
+    env_file:
+      - .env

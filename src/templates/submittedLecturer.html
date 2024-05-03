@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div class='ViewSubmission' style="width: 640px; background-color: #F2F4F7; padding: 2rem; margin: 2rem auto;">
+    <h1 style="padding: 1rem 3rem; background: linear-gradient(90deg, #06BCC1 0%, #000000 100%); -webkit-background-clip: text; background-clip: text; color: transparent; text-transform: uppercase; font-size: 53px;">
+      Submity
+    </h1>
+    <div class='message' style="font-size: 14px; background-color: white; padding: 1rem; color: #333333;">
+      <p>Dear Prof. {{submissionInfo.lecturerFirstName}} {{submissionInfo.lecturerLastName}},</p>
+      <p class='welcome'>
+        We would like to invite you to review and evaluate these recent assignments submitted by some of the students.
+      </p>
+      <ul class='ul' style="margin: 1rem; margin-left: 1rem;">
+        <li>
+          Student Name: <span style="font-weight: 700;">{{submissionInfo.studentFirstName}} {{submissionInfo.studentLastName}}</span>
+          Student ID: <span style="font-weight: 700;">{{submissionInfo.studentId}}</span>
+        </li>
+        <li>
+          Assignment Title: <span style="font-weight: 700;">{{submissionInfo.title}}</span>
+        </li>
+      </ul>
+      <p>
+        To access the student's submisssion, please click on the button to access the submissions.
+      </p>
+     
+      <p>
+        If you have any questions, contact our IT Support at <a href="gloria@amalitech.org">Support Email</a>
+      </p>
+      <p>Best regards</p>
+
+      <a class="url" href="{{frontURL}}" style="display: inline-block; padding:0; background-color:#fff; color: #fff; text-decoration: none; border: none; border-radius: 5px; cursor: pointer;">
+        <button style="border: none; background-color: #099250; padding: 0.8rem 2rem; color: white; border-radius: 5px; font-weight: 700; margin-bottom: 1rem;">
+          View Submission
+        </button>
+      </a>
+
+    </div>
+    <div class='footer' style="margin-top: 1rem; padding: 1rem;">
+      <p>
+        This email was sent to <span style="color: green">{{email}}</span>. If you’d rather not receive this kind of email, you
+        can <span style="color: #099250;">unsubscribe or manage your email preferences.</span>
+      </p>
+      <div class='end' style="display: flex; justify-content: space-between; color: #98A2B3; align-items: center; font-weight: 700;">
+        <p>SUBMITY</p>
+        <svg width="121" height="24" viewBox="0 0 121 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g clip-path="url(#clip0_5493_15053)">
+            <path
+              d="M22.5627 5.65593C21.7992 5.99362 20.9896 6.2154 20.1607 6.31393C21.0344 5.79136 21.6884 4.96894 22.0007 3.99993C21.1807 4.48793 20.2817 4.82993 19.3447 5.01493C18.7153 4.34151 17.881 3.89489 16.9716 3.74451C16.0622 3.59413 15.1286 3.74842 14.316 4.18338C13.5033 4.61834 12.8571 5.30961 12.4778 6.14972C12.0985 6.98983 12.0074 7.93171 12.2187 8.82893C10.5558 8.74558 8.92902 8.31345 7.44397 7.56059C5.95893 6.80773 4.64882 5.75097 3.59869 4.45893C3.22698 5.09738 3.03164 5.82315 3.03269 6.56193C3.03269 8.01193 3.77069 9.29293 4.89269 10.0429C4.2287 10.022 3.57932 9.84271 2.99869 9.51993V9.57193C2.99889 10.5376 3.33306 11.4735 3.94454 12.221C4.55601 12.9684 5.40717 13.4814 6.35369 13.6729C5.7373 13.84 5.09099 13.8646 4.46369 13.7449C4.73055 14.5762 5.25069 15.3031 5.95128 15.824C6.65186 16.3449 7.49782 16.6337 8.37069 16.6499C7.50317 17.3313 6.50986 17.8349 5.44757 18.1321C4.38527 18.4293 3.27481 18.5142 2.17969 18.3819C4.09139 19.6114 6.31678 20.264 8.58969 20.2619C16.2827 20.2619 20.4897 13.8889 20.4897 8.36193C20.4897 8.18193 20.4847 7.99993 20.4767 7.82193C21.2956 7.23009 22.0023 6.49695 22.5637 5.65693L22.5627 5.65593Z"
+              fill="#98A2B3" />
+          </g>
+          <g clip-path="url(#clip1_5493_15053)">
+            <path
+              d="M63.8024 21V14.034H66.1354L66.4844 11.326H63.8024V9.598C63.8024 8.814 64.0204 8.279 65.1444 8.279H66.5784V5.857C65.8842 5.78334 65.1865 5.74762 64.4884 5.75C62.4214 5.75 61.0064 7.012 61.0064 9.33V11.326H58.6684V14.034H61.0064V21H52.4004C52.1352 21 51.8808 20.8946 51.6933 20.7071C51.5057 20.5196 51.4004 20.2652 51.4004 20V4C51.4004 3.73478 51.5057 3.48043 51.6933 3.29289C51.8808 3.10536 52.1352 3 52.4004 3H68.4004C68.6656 3 68.92 3.10536 69.1075 3.29289C69.295 3.48043 69.4004 3.73478 69.4004 4V20C69.4004 20.2652 69.295 20.5196 69.1075 20.7071C68.92 20.8946 68.6656 21 68.4004 21H63.8024Z"
+              fill="#98A2B3" />
+          </g>
+          <g clip-path="url(#clip2_5493_15053)">
+            <path
+              d="M114.735 18.339H112.07V14.162C112.07 13.166 112.05 11.884 110.68 11.884C109.291 11.884 109.079 12.968 109.079 14.089V18.339H106.413V9.75H108.973V10.92H109.008C109.366 10.246 110.236 9.533 111.536 9.533C114.236 9.533 114.736 11.311 114.736 13.624V18.339H114.735ZM103.403 8.575C103.2 8.57526 102.998 8.53537 102.81 8.45761C102.622 8.37984 102.452 8.26574 102.308 8.12184C102.164 7.97793 102.05 7.80706 101.972 7.61901C101.895 7.43097 101.855 7.22944 101.855 7.026C101.856 6.71983 101.947 6.4206 102.117 6.16615C102.287 5.91169 102.529 5.71343 102.812 5.59645C103.095 5.47947 103.406 5.44902 103.706 5.50894C104.007 5.56886 104.282 5.71648 104.499 5.93311C104.715 6.14974 104.862 6.42566 104.922 6.72598C104.981 7.0263 104.951 7.33753 104.833 7.62032C104.716 7.9031 104.517 8.14474 104.263 8.31467C104.008 8.4846 103.709 8.5752 103.402 8.575H103.403ZM104.739 18.339H102.066V9.75H104.74V18.339H104.739ZM116.07 3H100.729C99.9934 3 99.4004 3.58 99.4004 4.297V19.703C99.4004 20.42 99.9944 21 100.728 21H116.066C116.8 21 117.4 20.42 117.4 19.703V4.297C117.4 3.58 116.8 3 116.066 3H116.069H116.07Z"
+              fill="#98A2B3" />
+          </g>
+          <defs>
+            <clipPath id="clip0_5493_15053">
+              <rect width="24" height="24" fill="white" transform="translate(0.400391)" />
+            </clipPath>
+            <clipPath id="clip1_5493_15053">
+              <rect width="24" height="24" fill="white" transform="translate(48.4004)" />
+            </clipPath>
+            <clipPath id="clip2_5493_15053">
+              <rect width="24" height="24" fill="white" transform="translate(96.4004)" />
+            </clipPath>
+          </defs>
+        </svg>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

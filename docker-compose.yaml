@@ -1,0 +1,14 @@
+version: "3.0"
+
+services:
+  asp-gh-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: asp-gh-backend
+    container_name: asp-feb-backend
+    ports:
+      - "3005:3005"
+    env_file:
+      - .env
+    restart: on-failure

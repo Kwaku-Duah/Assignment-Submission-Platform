@@ -1,0 +1,22 @@
+import { Router } from 'express';
+import authRoutes from './authRouter';
+import lecturerRoutes from './lecturerRoute';
+import studentRoute from './studentRoute';
+import changePassRoutes from './changePassRoute';
+import assignmentRouter from './assignmentRoutes';
+import forgotRoute from './forgotRoutes';
+import assignmentInviteRouter from './assignInviteRouter';
+import submissionRoute from './submissionRoute';
+import uploadRoute from './uploadRoute';
+
+const rootRouter: Router = Router();
+rootRouter.use('/auth', authRoutes);
+rootRouter.use('/lecturers', lecturerRoutes);
+rootRouter.use('/students', studentRoute);
+rootRouter.use('/password', changePassRoutes);
+rootRouter.use('/assignments', assignmentRouter);
+rootRouter.use('/invitation', assignmentInviteRouter);
+rootRouter.use('/submit', uploadRoute);
+rootRouter.use('/submissions', submissionRoute);
+rootRouter.use('/password', forgotRoute);
+export default rootRouter;
